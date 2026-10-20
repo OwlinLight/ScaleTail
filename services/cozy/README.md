@@ -6,13 +6,13 @@ This stack runs Cozy with a Tailscale sidecar, as described in [the standard set
 
 ## At a glance
 
-| Item          | Value                                                                                    |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| Web interface | `https://cozy.<tailnet>.ts.net` (login and API)                                          |
-| Apps          | `https://cozy-home.<tailnet>.ts.net`, `-settings`, and `-drive`, each its own device     |
-| Service port  | `8080`                                                                                   |
-| Images        | `cozy/cozy-stack`                                                                        |
-|               | `couchdb:3.3`                                                                            |
+| Item          | Value                                                                                                              |
+| ------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Web interface | `https://cozy.<tailnet>.ts.net` (login and API)                                                                    |
+| Apps          | `https://cozy-home.<tailnet>.ts.net`, `-settings`, and `-drive`, each its own device                               |
+| Service port  | `8080`                                                                                                             |
+| Images        | `cozy/cozy-stack`                                                                                                  |
+|               | `couchdb:3.3`                                                                                                      |
 | Data          | `./cozy-data/app/etc` (admin passphrase hash and keys), `./cozy-data/app/data` (files), `./cozy-data/db` (CouchDB) |
 
 ## Before you start
