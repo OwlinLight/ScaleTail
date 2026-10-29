@@ -1,0 +1,38 @@
+# Standalone alternative: use the Docker host's existing Tailscale connection.
+# Run with -f compose.host.yaml, not as an overlay on compose.yaml.
+services:
+  application:
+    image: ${IMAGE_URL:-freshrss/freshrss:latest}
+    container_name: app-${SERVICE:-freshrss}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HOST_PORT:-8088}:80"
+    environment:
+      TZ: ${TZ:-UTC}
+      CRON_MIN: ${CRON_MIN:-3,33}
+      # Docker's host gateway forwards Tailscale Serve traffic; infer the proxy.
+      TRUSTED_PROXY: ${HOST_TRUSTED_PROXY:-}
+      FRESHRSS_INSTALL: >-
+        --api-enabled
+        --base-url ${BASE_URL:?Set BASE_URL to the host Tailscale HTTPS address}
+        --db-type sqlite
+        --default-user ${ADMIN_USERNAME:-admin}
+        --language en
+      FRESHRSS_USER: >-
+        --api-password ${ADMIN_API_PASSWORD:?Set ADMIN_API_PASSWORD in your runtime env file}
+        --language en
+        --password ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in your runtime env file}
+        --user ${ADMIN_USERNAME:-admin}
+    volumes:
+      - ./${SERVICE:-freshrss}-data/app/data:/var/www/FreshRSS/data
+      - ./${SERVICE:-freshrss}-data/app/extensions:/var/www/FreshRSS/extensions
+    healthcheck:
+      test: ["CMD", "php", "-f", "./cli/health.php"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
